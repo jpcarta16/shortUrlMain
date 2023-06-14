@@ -6,34 +6,34 @@ import {
 
 import { Request, Response } from 'express'
 
-export const saveUrl = async (
-  req: Request, 
-  res: Response
-): Promise<void> => {
-  const { urlAddress, clientIp, username } = req.body
+// export const saveUrl = async (
+//   req: Request, 
+//   res: Response
+// ): Promise<void> => {
+//   const { urlAddress, clientIp, username } = req.body
 
-  try{
-    const strUrl = validateUrlString(urlAddress)
-    const hash = await hashCreator(strUrl)
+//   try{
+//     const strUrl = validateUrlString(urlAddress)
+//     const hash = await hashCreator(strUrl)
 
-    const reg = {
-      hash,
-      urlAddress: strUrl,
-      timestamp: new Date().getTime(),
-      ipAddress: clientIp||'',
-      username: username||'',
-    };
+//     const reg = {
+//       hash,
+//       urlAddress: strUrl,
+//       timestamp: new Date().getTime(),
+//       ipAddress: clientIp||'',
+//       username: username||'',
+//     };
 
-    const dbRes = await db.URL.create(reg);
-    if(!dbRes.hash)
-      res.status(201).send({ message: 'ok', hash })
-    else 
-      throw new Error('internal error db error');
-  }
-  catch(err: any){
-    res.status(500).send({ message: err.message });
-  }
-};
+//     const dbRes = await db.URL.create(reg);
+//     if(!dbRes.hash)
+//       res.status(201).send({ message: 'ok', hash })
+//     else 
+//       throw new Error('internal error db error');
+//   }
+//   catch(err: any){
+//     res.status(500).send({ message: err.message });
+//   }
+// };
 
 export const getUrlFromHash = async (
   req: Request, 
@@ -59,4 +59,27 @@ export const getUserUrl = async(
   } catch  (err: any){
     return res.status(500).send({ message: err.message });
   }  
+}
+
+export const saveUrl = async (adressUrl: string, username: string | null= null, ipAddress: string = ''): Promise<string>=>{
+  try{
+    const validateUrl = validateUrlString(adressUrl)
+    const hash = await hashCreator(adressUrl)
+
+    const reg = {
+      hash,
+      urlAddress: validateUrl,
+      username: username || "",
+      ipAddress,
+    }
+    const createdUrl = await db.URL.create(reg)
+    console.log('tst', createdUrl.dataValues)
+    const {hash: createdHash } = createdUrl.dataValues
+    return createdHash
+
+  }
+  catch (err) {
+  console.error('saveUrl failed');
+    throw err;
+  }
 }
