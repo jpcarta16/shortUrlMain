@@ -1,11 +1,14 @@
-import { Router } from "express";
-// import * as userController from '../controllers/user.controller'
-// import * as auth from '../controllers/auth.controller'
+import { Router, Request, Response } from "express";
+import * as authController from '../controllers/auth.controller'
+import * as auth from '../middleware/auth.middleware'
 // import * as urlController from '../controllers/url.controller'
-// import * as authMiddleware from '../middleware/auth.middleware'
+import * as authMiddleware from '../middleware/auth.middleware'
 
 const router = Router()
 
-// Router.post('./singup', auth.singUp)
+router.post('/singup', authController.singUp)
+router.post('/login', authController.login)
+// router.get('/users/:username/urls', authController.urlsUser)
+router.get('/users/:username', authController.getAllUSers)
 
 export default router

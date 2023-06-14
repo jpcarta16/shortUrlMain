@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const models_1 = require("./models/models");
-// import router from './routes/routes'
+const routes_1 = __importDefault(require("./routes/routes"));
 models_1.sequelize.sync({ force: true })
     .then(() => {
     console.log('Synced db.');
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
         return welcomeMessage(res);
     }
 });
-// app.use('/', router)
+app.use('/', routes_1.default);
 app.listen(APP_PORT, () => {
     console.log(`Shortening url service App listening on port: ${APP_PORT}`);
 });

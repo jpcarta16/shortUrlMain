@@ -47,4 +47,16 @@ export const getUrlFromHash = async (
     return res.status(500).send({ message: err.message });
   }
 }
-  
+
+export const getUserUrl = async(
+  req: Request,
+  res: Response
+) => {
+  if(!req.body.username) return res.status(400).send({ message: "User dosen't exist" });
+  try {
+    const userUrl = await db.URL.findAll({raw: true, where: { username: req.body.URL } })
+    return res.send(userUrl)
+  } catch  (err: any){
+    return res.status(500).send({ message: err.message });
+  }  
+}

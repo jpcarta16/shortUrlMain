@@ -1,36 +1,27 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.singUp = exports.login = void 0;
+exports.getRegsFromUser = void 0;
 const models_1 = __importDefault(require("../models/models"));
-const login = (req, res) => {
-    if (!req.body.username || !req.body.password) {
-        res.status(400).send({ message: 'nombre de usuario o contraseña inexistente' });
-        return;
+const getRegsFromUser = (username, req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const regs = yield models_1.default.URL.findAll({ where: { username } });
+        return regs;
     }
-    models_1.default.Users.findAll({ raw: true, where: { username: req.body.username } })
-        .then((userList) => {
-        if (!userList.length)
-            return res.status(400).send({ message: 'Username or password dosent exist' });
-        const user = userList[0];
-        if (user.password != req.body.password)
-            return res.status(410).send({ message: 'wrong password' });
-        return res.send({ message: 'inicio de sesion satisfactorio', user: user.username });
-    })
-        .catch((err) => res.status(500).send({ message: err.message }));
-};
-exports.login = login;
-const singUp = (req, res) => {
-    const { username, password } = req.body;
-    models_1.default.Users.create({ username, password })
-        .then((createdUSer) => {
-        const { username, password, id } = createdUSer;
-        res.status(201).send({ username, password, id });
-    })
-        .catch((err) => {
-        return res.status(500).send({ message: err.message });
-    });
-};
-exports.singUp = singUp;
+    catch (err) {
+        console.error('database retrieve failed for url');
+        throw err;
+    }
+});
+exports.getRegsFromUser = getRegsFromUser;

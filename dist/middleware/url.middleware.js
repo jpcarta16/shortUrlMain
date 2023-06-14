@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUrlFromHash = exports.saveUrl = void 0;
+exports.getUserUrl = exports.getUrlFromHash = exports.saveUrl = void 0;
 const models_1 = __importDefault(require("../models/models"));
 const url_controller_1 = require("../controllers/url.controller");
 const saveUrl = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -50,3 +50,15 @@ const getUrlFromHash = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getUrlFromHash = getUrlFromHash;
+const getUserUrl = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.body.username)
+        return res.status(400).send({ message: "User dosen't exist" });
+    try {
+        const userUrl = yield models_1.default.URL.findAll({ raw: true, where: { username: req.body.URL } });
+        return res.send(userUrl);
+    }
+    catch (err) {
+        return res.status(500).send({ message: err.message });
+    }
+});
+exports.getUserUrl = getUserUrl;
