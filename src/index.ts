@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
 import path from "path";
 
-import { sequelize } from "./src/models/models";
-import router from './src/routes/routes'
+import { sequelize } from "./models/models";
+import router from './routes/routes'
 
 sequelize.sync({force: true})
   .then(() => {
@@ -12,12 +12,11 @@ sequelize.sync({force: true})
     console.log('Failed to sync db: ' + err.message)
 })
 
-const APP_PORT = 3000
+const APP_PORT = 8090
 
 const app = express()
 
 app.use(express.json())
-
 app.use(express.urlencoded({ extended: true}))
 
 const welcomeMessage = (res: Response) => {

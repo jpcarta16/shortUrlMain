@@ -13,9 +13,9 @@ exports.sequelize = new sequelize_1.Sequelize(db_config_1.dbConfig.DB, db_config
         idle: db_config_1.dbConfig.pool.idle
     }
 });
-class User extends sequelize_1.Model {
+class Users extends sequelize_1.Model {
 }
-User.init({
+Users.init({
     username: {
         type: sequelize_1.DataTypes.STRING,
         unique: true
@@ -48,6 +48,6 @@ URL.init({
 });
 exports.default = {
     Sequelize: sequelize_1.Sequelize,
-    User,
+    Users,
     URL
 };

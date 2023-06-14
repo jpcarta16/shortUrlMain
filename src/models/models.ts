@@ -22,12 +22,12 @@ type UserAttributes = {
   password: string
 }
 
-class User extends Model<UserAttributes> implements UserAttributes{
+class Users extends Model<UserAttributes> implements UserAttributes{
   public username!: string
   public password!: string
 }
 
-User.init(
+Users.init(
   {
     username: {
       type: DataTypes.STRING,
@@ -80,6 +80,6 @@ URL.init(
 
 export default {
   Sequelize,
-  User,
+  Users,
   URL
 }
